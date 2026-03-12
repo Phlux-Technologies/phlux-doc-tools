@@ -167,6 +167,57 @@
   {\begin{mdframed}[style=phluxquote]}
   {\end{mdframed}}
 
+% --- Requirement Document Support ---
+% (hyperref is loaded by the pandoc template — do not reload here)
+
+% Cross-reference macros
+\newcommand{\reqref}[1]{\hyperlink{req:#1}{\texttt{\small #1}}}
+\newcommand{\reqtarget}[1]{\hypertarget{req:#1}{}}
+
+% Status badge (inline colored pill)
+\newcommand{\statusbadge}[2]{%
+  \tikz[baseline=(badge.base)]{%
+    \node[fill=#2, text=white, font=\scriptsize\bfseries,
+          rounded corners=2pt, inner xsep=4pt, inner ysep=2pt] (badge) {#1};%
+  }%
+}
+
+% Requirement boxes — demonstrated (green)
+\newtcolorbox{reqdemonstrated}[1]{
+  colback=phluxsafe!3,
+  colframe=phluxsafe!50,
+  coltitle=white,
+  title={\textbf{#1} \hfill \statusbadge{DEMONSTRATED}{phluxsafe}},
+  fonttitle=\small\bfseries,
+  rounded corners, boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  breakable, before skip=8pt, after skip=8pt
+}
+
+% Requirement boxes — gap (amber)
+\newtcolorbox{reqgap}[1]{
+  colback=phluxaccent!3,
+  colframe=phluxaccent!50,
+  coltitle=white,
+  title={\textbf{#1} \hfill \statusbadge{GAP}{phluxaccent!80!black}},
+  fonttitle=\small\bfseries,
+  rounded corners, boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  breakable, before skip=8pt, after skip=8pt
+}
+
+% Requirement boxes — broken (red)
+\newtcolorbox{reqbroken}[1]{
+  colback=phluxwarn!3,
+  colframe=phluxwarn!50,
+  coltitle=white,
+  title={\textbf{#1} \hfill \statusbadge{BROKEN}{phluxwarn}},
+  fonttitle=\small\bfseries,
+  rounded corners, boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  breakable, before skip=8pt, after skip=8pt
+}
+
 % --- TikZ Styles (shared with presentations) ---
 \tikzset{
   board/.style={
