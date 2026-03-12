@@ -1,0 +1,177 @@
+$passoptions.latex()$
+\documentclass[
+$for(babel-otherlangs)$
+  $babel-otherlangs$,
+$endfor$
+$if(babel-lang)$
+  $babel-lang$,
+$endif$
+$if(fontsize)$
+  $fontsize$,
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$endif$
+$for(classoption)$
+  $classoption$$sep$,
+$endfor$
+]{$documentclass$}
+\usepackage{xcolor}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+\usepackage{amsmath,amssymb}
+$--
+$-- section numbering
+$--
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{-\maxdimen}
+$endif$
+$fonts.latex()$
+$font-settings.latex()$
+$common.latex()$
+$for(header-includes)$
+$header-includes$
+$endfor$
+$after-header-includes.latex()$
+$hypersetup.latex()$
+
+$if(title)$
+$-- Store title/subtitle/author/date for custom title page — do not use \maketitle
+\makeatletter
+\newcommand{\phluxTitle}{$title$}
+\newcommand{\phluxDate}{$date$}
+\makeatother
+$if(subtitle)$
+\newcommand{\phluxSubtitle}{$subtitle$}
+$else$
+\newcommand{\phluxSubtitle}{}
+$endif$
+\newcommand{\phluxAuthor}{$for(author)$$author$$sep$, $endfor$}
+$endif$
+
+\author{$for(author)$$author$$sep$ \and $endfor$}
+\date{$date$}
+
+\begin{document}
+
+$if(title)$
+%% --- Custom Phlux Title Page ---
+\thispagestyle{plain}
+\begin{titlepage}
+\newgeometry{margin=0pt}
+
+%% Dark header block (top ~38% of page)
+\noindent
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[phluxdark] (current page.north west) rectangle
+    ([yshift=-0.38\paperheight]current page.north east);
+
+  %% Logo in top-right
+  \node[anchor=north east, inner sep=0pt]
+    at ([xshift=-1.5cm, yshift=-1.2cm]current page.north east)
+    {\includegraphics[height=1.8cm]{images/logos/phlux_no_tech.png}};
+
+  %% Title text
+  \node[anchor=west, text=white, font=\fontsize{28}{34}\selectfont\bfseries,
+        text width=0.7\paperwidth]
+    at ([xshift=1.5in, yshift=-0.15\paperheight]current page.north west)
+    {\phluxTitle};
+
+  %% Subtitle (if present)
+  \ifx\phluxSubtitle\empty\else
+    \node[anchor=west, text=white!85, font=\fontsize{14}{18}\selectfont,
+          text width=0.7\paperwidth]
+      at ([xshift=1.5in, yshift=-0.24\paperheight]current page.north west)
+      {\phluxSubtitle};
+  \fi
+
+  %% Accent rule
+  \fill[phluxaccent]
+    ([xshift=1.5in, yshift=-0.35\paperheight]current page.north west)
+    rectangle
+    ([xshift=5in, yshift=-0.355\paperheight]current page.north west);
+\end{tikzpicture}
+
+%% Author and date below the dark block
+\vspace*{0.38\paperheight}
+\vspace{1.5cm}
+
+\noindent\hspace{1.5in}%
+\begin{minipage}{0.7\textwidth}
+  {\large\color{phluxdark}\phluxAuthor}\\[0.5em]
+  {\color{phluxdark!60}\phluxDate}
+\end{minipage}
+
+$if(abstract)$
+\vspace{2cm}
+\noindent\hspace{1.5in}%
+\begin{minipage}{0.7\textwidth}
+  \begin{mdframed}[style=phluxquote]
+  \textbf{Abstract}\par\medskip
+  $abstract$
+  \end{mdframed}
+\end{minipage}
+$endif$
+
+\restoregeometry
+\end{titlepage}
+$endif$
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(toc)$
+$if(toc-title)$
+\renewcommand*\contentsname{$toc-title$}
+$endif$
+{
+$if(colorlinks)$
+$if(toccolor)$
+\hypersetup{linkcolor=$toccolor$}
+$endif$
+$endif$
+\setcounter{tocdepth}{$toc-depth$}
+\footnotesize
+\setlength{\parskip}{0pt}
+\tableofcontents
+\normalsize
+}
+\clearpage
+$endif$
+$if(lof)$
+\listoffigures
+$endif$
+$if(lot)$
+\listoftables
+$endif$
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+$body$
+
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(has-chapters)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+
+$endif$
+$endif$
+$if(biblatex)$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}

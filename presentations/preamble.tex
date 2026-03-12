@@ -1,0 +1,117 @@
+% PhluxFields Presentation Preamble
+% Visual configuration for Beamer + Metropolis slides
+% Portable: works on Windows, macOS, and Linux
+
+% --- Packages ---
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, fit, calc, decorations.pathreplacing}
+\usepackage{graphicx}
+
+% --- Fonts (portable: use preferred font if available, else defaults) ---
+% Primary: WeblySleek UI (Light body, Semibold headings) — matches Phlux PowerPoint style
+\IfFontExistsTF{WeblySleek UI Light}{%
+  \setsansfont{WeblySleek UI Light}[
+    BoldFont={WeblySleek UI Semibold},
+    ItalicFont={WeblySleek UI Light Italic},
+    BoldItalicFont={WeblySleek UI Semibold Italic}
+  ]%
+}{%
+  \IfFontExistsTF{Segoe UI}{\setsansfont{Segoe UI}}{}%
+}
+\IfFontExistsTF{Cascadia Mono}{\setmonofont[Scale=0.85]{Cascadia Mono}}{%
+  \IfFontExistsTF{Fira Code}{\setmonofont[Scale=0.85]{Fira Code}}{}%
+}
+
+% --- Colors (matched to www.phlux.io brand) ---
+\definecolor{phluxdark}{HTML}{1E2028}
+\definecolor{phluxaccent}{HTML}{FBAA36}
+\definecolor{phluxsafe}{HTML}{2E7D32}
+\definecolor{phluxwarn}{HTML}{E74C3C}
+\definecolor{phluxblue}{HTML}{1565C0}
+
+% --- Logo on Title Slide ---
+\titlegraphic{\hfill\includegraphics[height=1.2cm]{images/logos/phlux_no_tech.png}}
+
+% --- Beamer Configuration ---
+\metroset{block=fill}
+
+% Frame title bar and standout frames
+\setbeamercolor{palette primary}{bg=phluxdark, fg=white}
+
+\setbeamercolor{progress bar}{fg=phluxaccent}
+\setbeamercolor{title separator}{fg=phluxaccent}
+\setbeamercolor{alerted text}{fg=phluxaccent}
+\renewcommand{\arraystretch}{1.2}
+
+% --- Dark Title & Section Slides ---
+% Title slide: created at \begin{document} via \AtBeginDocument.
+% Template-body approaches fail because pandoc/Metropolis resets colors
+% after \begin{document}. Preamble-defined hooks run in the right scope.
+\AtBeginDocument{%
+  \begingroup
+    \setbeamercolor{background canvas}{bg=phluxdark}%
+    \setbeamercolor{normal text}{fg=white}%
+    \setbeamercolor{title}{fg=white}%
+    \setbeamercolor{subtitle}{fg=white!80}%
+    \setbeamercolor{author}{fg=white!80}%
+    \setbeamercolor{date}{fg=white!80}%
+    \setbeamercolor{institute}{fg=white!80}%
+    \setbeamercolor{title separator}{fg=phluxaccent}%
+    \usebeamercolor[fg]{normal text}%
+    \begin{frame}[plain,noframenumbering]
+      \titlepage
+    \end{frame}
+  \endgroup
+}
+% Section dividers: Metropolis overrides any template-level \AtBeginSection,
+% so we override it here in the preamble (loaded after the theme).
+\AtBeginSection{%
+  \begingroup
+    \setbeamercolor{background canvas}{bg=phluxdark}%
+    \setbeamercolor{normal text}{fg=white}%
+    \setbeamercolor{progress bar}{fg=phluxaccent}%
+    \usebeamercolor[fg]{normal text}%
+    \begin{frame}[plain,noframenumbering]
+      \sectionpage
+    \end{frame}
+  \endgroup
+}
+
+% --- TikZ Styles ---
+\tikzset{
+  board/.style={
+    draw=phluxdark, fill=phluxdark!8, rounded corners=3pt,
+    minimum height=0.9cm, minimum width=2cm, align=center,
+    font=\scriptsize\bfseries, thick
+  },
+  adapter/.style={
+    draw=phluxdark!50, fill=white, rounded corners=2pt,
+    minimum height=0.7cm, minimum width=1cm, align=center,
+    font=\tiny
+  },
+  safebox/.style={
+    draw=phluxsafe!70, fill=phluxsafe!6, rounded corners=4pt,
+    thick, align=left, inner sep=5pt, font=\scriptsize
+  },
+  unsafebox/.style={
+    draw=phluxdark!40, fill=phluxdark!3, rounded corners=4pt,
+    thick, dashed, align=left, inner sep=5pt, font=\scriptsize
+  },
+  pdufield/.style={
+    draw=phluxdark!60, minimum height=0.8cm, align=center,
+    font=\scriptsize
+  },
+  iicblock/.style={
+    draw=phluxblue!60, fill=phluxblue!8, rounded corners=2pt,
+    font=\scriptsize, minimum height=0.5cm, align=center
+  },
+  lbl/.style={font=\tiny, text=phluxdark},
+  lbls/.style={font=\scriptsize, text=phluxdark},
+  connline/.style={thick, phluxaccent},
+  conn/.style={-{Stealth[length=4pt]}, thick, phluxaccent},
+  biconn/.style={{Stealth[length=4pt]}-{Stealth[length=4pt]}, thick, phluxaccent},
+}

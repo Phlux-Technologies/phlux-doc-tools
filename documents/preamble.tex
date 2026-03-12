@@ -1,0 +1,203 @@
+% Phlux Document Preamble
+% Visual configuration for branded article-class PDFs
+% Portable: works on Windows, macOS, and Linux
+
+% --- Packages ---
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, fit, calc, decorations.pathreplacing}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[breakable, skins]{tcolorbox}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{caption}
+\usepackage{float}
+
+% --- Fonts (portable: use preferred font if available, else defaults) ---
+\IfFontExistsTF{WeblySleek UI Light}{%
+  \setsansfont{WeblySleek UI Light}[
+    BoldFont={WeblySleek UI Semibold},
+    ItalicFont={WeblySleek UI Light Italic},
+    BoldItalicFont={WeblySleek UI Semibold Italic}
+  ]%
+  \setmainfont{WeblySleek UI Light}[
+    BoldFont={WeblySleek UI Semibold},
+    ItalicFont={WeblySleek UI Light Italic},
+    BoldItalicFont={WeblySleek UI Semibold Italic}
+  ]%
+}{%
+  \IfFontExistsTF{Segoe UI}{%
+    \setsansfont{Segoe UI}%
+    \setmainfont{Segoe UI}%
+  }{}%
+}
+\IfFontExistsTF{Cascadia Mono}{\setmonofont[Scale=0.85]{Cascadia Mono}}{%
+  \IfFontExistsTF{Fira Code}{\setmonofont[Scale=0.85]{Fira Code}}{}%
+}
+
+% --- Colors (matched to www.phlux.io brand) ---
+\definecolor{phluxdark}{HTML}{1E2028}
+\definecolor{phluxaccent}{HTML}{FBAA36}
+\definecolor{phluxsafe}{HTML}{2E7D32}
+\definecolor{phluxwarn}{HTML}{E74C3C}
+\definecolor{phluxblue}{HTML}{1565C0}
+
+% --- Table Styling ---
+\renewcommand{\arraystretch}{1.2}
+
+% --- Caption Styling ---
+\captionsetup{
+  font=small,
+  labelfont=bf,
+  textfont=it,
+  format=plain,
+  margin=1cm
+}
+
+% --- Headers and Footers (fancyhdr) ---
+\setlength{\headheight}{26pt}   % Room for 0.6cm logo + rule
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\includegraphics[height=0.6cm]{images/logos/phlux_white_gray_no_tech.png}}
+\fancyhead[R]{\small\textcolor{phluxdark}{\nouppercase{\rightmark}}}
+\fancyfoot[C]{\small\textcolor{phluxdark!60}{\thepage}}
+\fancyfoot[R]{\small\textcolor{phluxdark!40}{Phlux Technologies}}
+\renewcommand{\headrulewidth}{0.8pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{phluxaccent}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+
+% Suppress headers/footers on title page
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% --- Section Heading Styles (titlesec) ---
+\titleformat{\section}
+  {\Large\bfseries\color{phluxdark}}
+  {\thesection}{1em}{}
+  [\vspace{-0.6em}{\color{phluxaccent}\rule{\linewidth}{1.5pt}}]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{phluxdark!85}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{phluxdark!70}}
+  {\thesubsubsection}{1em}{}
+
+% --- Callout Box Environments (tcolorbox) ---
+\newtcolorbox{insight}{
+  colback=phluxblue!5,
+  colframe=phluxblue,
+  coltitle=white,
+  title={\textbf{Insight}},
+  fonttitle=\small\bfseries,
+  rounded corners,
+  boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  breakable,
+  before skip=8pt, after skip=8pt
+}
+
+\newtcolorbox{warning}{
+  colback=phluxwarn!5,
+  colframe=phluxwarn,
+  coltitle=white,
+  title={\textbf{Warning}},
+  fonttitle=\small\bfseries,
+  rounded corners,
+  boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  breakable,
+  before skip=8pt, after skip=8pt
+}
+
+\newtcolorbox{decision}{
+  colback=phluxaccent!5,
+  colframe=phluxaccent,
+  coltitle=white,
+  title={\textbf{Decision}},
+  fonttitle=\small\bfseries,
+  rounded corners,
+  boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  breakable,
+  before skip=8pt, after skip=8pt
+}
+
+\newtcolorbox{safetynote}{
+  colback=phluxsafe!5,
+  colframe=phluxsafe,
+  coltitle=white,
+  title={\textbf{Safety Note}},
+  fonttitle=\small\bfseries,
+  rounded corners,
+  boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  breakable,
+  before skip=8pt, after skip=8pt
+}
+
+% --- Styled Blockquotes (mdframed) ---
+\mdfdefinestyle{phluxquote}{
+  linecolor=phluxaccent,
+  linewidth=3pt,
+  backgroundcolor=phluxaccent!5,
+  topline=false,
+  bottomline=false,
+  rightline=false,
+  leftline=true,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=8pt,
+  skipbelow=8pt
+}
+
+% Redefine quote environment to use branded styling
+\renewenvironment{quote}
+  {\begin{mdframed}[style=phluxquote]}
+  {\end{mdframed}}
+
+% --- TikZ Styles (shared with presentations) ---
+\tikzset{
+  board/.style={
+    draw=phluxdark, fill=phluxdark!8, rounded corners=3pt,
+    minimum height=0.9cm, minimum width=2cm, align=center,
+    font=\scriptsize\bfseries, thick
+  },
+  adapter/.style={
+    draw=phluxdark!50, fill=white, rounded corners=2pt,
+    minimum height=0.7cm, minimum width=1cm, align=center,
+    font=\tiny
+  },
+  safebox/.style={
+    draw=phluxsafe!70, fill=phluxsafe!6, rounded corners=4pt,
+    thick, align=left, inner sep=5pt, font=\scriptsize
+  },
+  unsafebox/.style={
+    draw=phluxdark!40, fill=phluxdark!3, rounded corners=4pt,
+    thick, dashed, align=left, inner sep=5pt, font=\scriptsize
+  },
+  pdufield/.style={
+    draw=phluxdark!60, minimum height=0.8cm, align=center,
+    font=\scriptsize
+  },
+  iicblock/.style={
+    draw=phluxblue!60, fill=phluxblue!8, rounded corners=2pt,
+    font=\scriptsize, minimum height=0.5cm, align=center
+  },
+  lbl/.style={font=\tiny, text=phluxdark},
+  lbls/.style={font=\scriptsize, text=phluxdark},
+  connline/.style={thick, phluxaccent},
+  conn/.style={-{Stealth[length=4pt]}, thick, phluxaccent},
+  biconn/.style={{Stealth[length=4pt]}-{Stealth[length=4pt]}, thick, phluxaccent},
+}

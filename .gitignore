@@ -1,0 +1,17 @@
+# LaTeX build artifacts
+*.aux
+*.nav
+*.snm
+*.toc
+*.vrb
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Image tool backups
+*.bak
